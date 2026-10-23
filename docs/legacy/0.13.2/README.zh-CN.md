@@ -8,8 +8,12 @@
 ![Chrome](https://img.shields.io/badge/Chrome-127%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Manifest](https://img.shields.io/badge/Manifest-V3-34A853)
 ![Tests](https://img.shields.io/badge/tests-49%20passed-2EA043)
+![许可证](https://img.shields.io/badge/许可证-PolyForm%20Noncommercial%201.0.0-EA7E20)
 
 维护者：iTang
+
+> [!IMPORTANT]
+> 智序标签是一个**仅限非商业用途的源码可用项目**。任何商业使用均须事先获得版权所有者的书面许可，详见[许可证](#许可证)。
 
 ## 它解决的不是“标签太多”，而是“标签还要继续用”
 
@@ -310,12 +314,22 @@ fail  0
 - 扩展不能修改 Chrome 自带的标签搜索菜单；
 - 0.13.2 不包含手动释放后台页面的内存管理模块，该能力在后续“栖页”版本中加入。
 
+## 许可证
+
+版权所有 © 2026 iTang。
+
+智序标签依据 [PolyForm Noncommercial License 1.0.0](../../../LICENSE) 提供。在遵守完整许可证条款并保留必要声明的前提下，可以将本项目用于获准的非商业用途，包括使用、学习、修改和再分发。
+
+仓库许可证**不授予商业使用权**，包括用于付费产品或服务、产生收入的部署、商业客户项目以及企业内部业务流程。任何商业使用均须事先获得版权所有者另行出具的书面许可。
+
+本项目属于**源码可用（source-available）**项目，而不是 OSI 认可的开源软件。如果本段摘要与 `LICENSE` 文件存在冲突，以 `LICENSE` 文件为准。
+
 ## 公开发布前的仓库清单
 
 - [ ] 将本目录中的 README 与项目源码放在同一仓库根目录；
 - [ ] 保留 `assets/` 中的相对图片路径；
 - [ ] 增加独立隐私政策，准确说明 AI 标题/域名传输与本机 Key 存储；
-- [ ] 选择并添加 `LICENSE`；当前快照未声明开源许可证；
+- [x] 添加 PolyForm Noncommercial 1.0.0 `LICENSE`，并明确说明本项目属于源码可用项目；
 - [ ] 补充问题反馈、支持渠道和 Chrome Web Store 链接；
 - [ ] 发布前在干净 Chrome 配置中完成一次安装、整理、预览、重启撤销的人工回归。
 
@@ -325,4 +339,3 @@ fail  0
 - 没有使用生成式图片伪造产品界面；
 - 0.13.x 在连续迭代中调整过文案与信息密度，因此图片用于证明真实流程和结果，不保证每个像素与最终 0.13.2 完全一致；
 - 公开版主动排除了含账号、API Key、完整浏览历史和系统用户名的截图。
-
