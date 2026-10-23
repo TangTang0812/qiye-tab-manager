@@ -8,8 +8,12 @@
 ![Chrome](https://img.shields.io/badge/Chrome-140%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Manifest](https://img.shields.io/badge/Manifest-V3-34A853)
 ![Tests](https://img.shields.io/badge/tests-64%20passed-2EA043)
+![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-EA7E20)
 
 Maintainer: iTang
+
+> [!IMPORTANT]
+> Qiye is **source-available for noncommercial use only**. Commercial use requires prior written permission from the copyright holder. See [License](#license).
 
 ## Why Smart Tab Organizer became Qiye
 
@@ -383,13 +387,23 @@ The detailed Smart Tab Organizer 0.13.2 documentation is preserved under [`docs/
 - Chrome decides the side-panel position.
 - Local and AI grouping can both misclassify content.
 
+## License
+
+Copyright © 2026 iTang.
+
+Qiye is provided under the [PolyForm Noncommercial License 1.0.0](./LICENSE). You may use, study, modify, and redistribute it for permitted noncommercial purposes, subject to the full license terms and preservation of the required notices.
+
+Commercial use is **not granted** by the repository license. This includes use in paid products or services, revenue-generating deployments, commercial client work, and internal business workflows. Obtain separate written permission from the copyright holder before any commercial use.
+
+This is a **source-available** project, not OSI-approved open-source software. If this summary conflicts with the `LICENSE` file, the `LICENSE` file controls.
+
 ## Before publishing
 
 - [ ] Keep `README.md` as the default English entry and `README.zh-CN.md` as the linked Chinese version.
 - [ ] Keep relative screenshot paths intact.
 - [ ] Add a standalone privacy policy for organization metadata, AI transfer, local key storage, and memory management.
 - [ ] Run clean-profile, multi-window, restart, and 100+ tab regression tests.
-- [ ] Choose and add a `LICENSE`; this snapshot does not declare an open-source license.
+- [x] Add the PolyForm Noncommercial 1.0.0 `LICENSE` and clearly identify the project as source-available.
 - [ ] Add issue, support, release, and Chrome Web Store links.
 - [ ] Recheck screenshots for account names, full URLs, API keys, browsing history, and OS usernames.
 
@@ -400,4 +414,3 @@ The detailed Smart Tab Organizer 0.13.2 documentation is preserved under [`docs/
 - No generative image was used to fabricate product UI.
 - Screenshots containing a GitHub account page, full tab-title list, Activity Monitor username column, or API configuration were excluded.
 - Real-world data demonstrates workflow and observed outcomes, not a cross-device performance guarantee.
-
