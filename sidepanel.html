@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>栖页</title>
+  <script src="theme-init.js"></script>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body data-surface="panel">
+  <div id="toast-stack" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
+  <div id="tour" class="tour" hidden>
+    <div class="tour-shade" aria-hidden="true"></div>
+    <div class="tour-shade" aria-hidden="true"></div>
+    <div class="tour-shade" aria-hidden="true"></div>
+    <div class="tour-shade" aria-hidden="true"></div>
+    <div id="tour-ring" class="tour-ring" aria-hidden="true"></div>
+    <section id="tour-card" class="tour-card" role="region" aria-labelledby="tour-title" aria-describedby="tour-copy">
+      <span id="tour-progress" class="tour-progress"></span>
+      <h2 id="tour-title"></h2>
+      <p id="tour-copy"></p>
+      <div class="tour-actions">
+        <button id="tour-skip" class="text-button" type="button">跳过引导</button>
+        <button id="tour-next" class="save-button" type="button">下一步</button>
+      </div>
+    </section>
+  </div>
+  <main class="app">
+    <div id="workspace-shell">
+      <header class="topbar">
+        <img class="brand-mark" src="icons/source.svg" width="36" height="36" alt="" aria-hidden="true">
+        <div class="title-block">
+          <h1 id="app-title">栖页</h1>
+          <p id="scope">正在读取当前窗口…</p>
+        </div>
+        <div class="surface-actions">
+          <button id="open-sidepanel" class="icon-button" type="button" title="在侧边栏打开" aria-label="在侧边栏打开">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="2.8" y="4" width="18.4" height="16" rx="2.4" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M14.4 4.5v15M17 10l2 2-2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="appearance-control">
+            <button class="icon-button appearance-button" type="button" title="切换外观" aria-label="切换外观" aria-controls="appearance-menu" aria-expanded="false">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="8.25" stroke="currentColor" stroke-width="1.7"/>
+                <path d="M12 3.75a8.25 8.25 0 0 1 0 16.5Z" fill="currentColor"/>
+              </svg>
+            </button>
+            <div id="appearance-menu" class="appearance-menu" role="group" aria-label="外观模式" hidden>
+              <span class="appearance-menu-title">外观</span>
+              <button type="button" data-theme-option="system" aria-pressed="true">跟随系统</button>
+              <button type="button" data-theme-option="light" aria-pressed="false">浅色</button>
+              <button type="button" data-theme-option="dark" aria-pressed="false">深色</button>
+            </div>
+          </div>
+          <button id="settings-button" class="icon-button" type="button" title="打开设置" aria-label="打开设置" aria-controls="settings">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M17.7 13.05 18.8 13.85l-1.8 3.1-1.3-.5a7.8 7.8 0 0 1-1.7 1l-.2 1.4h-3.6l-.2-1.4a7.8 7.8 0 0 1-1.7-1l-1.3.5-1.8-3.1 1.1-.8a7.7 7.7 0 0 1 0-2.1l-1.1-.8 1.8-3.1 1.3.5a7.8 7.8 0 0 1 1.7-1l.2-1.4h3.6l.2 1.4a7.8 7.8 0 0 1 1.7 1l1.3-.5 1.8 3.1-1.1.8a7.7 7.7 0 0 1 0 2.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <nav class="module-nav" role="tablist" aria-label="功能模块">
+        <button id="organize-tab" class="module-tab" type="button" role="tab" aria-controls="main-view" aria-selected="true" tabindex="0">标签整理</button>
+        <button id="performance-tab" class="module-tab" type="button" role="tab" aria-controls="performance-view" aria-selected="false" tabindex="-1">内存管理</button>
+      </nav>
+    </div>
+
+    <section id="main-view" role="tabpanel" aria-labelledby="organize-tab">
+      <section class="scope-picker" aria-labelledby="scope-picker-title">
+        <div class="scope-metrics" aria-live="polite">
+          <span>可整理 <strong id="scope-eligible-count">—</strong></span>
+          <span>窗口标签 <strong id="scope-total-count">—</strong></span>
+        </div>
+        <div id="scope-current" class="scope-current" hidden>
+          <span><small>整理范围</small><strong id="scope-current-name">继续整理</strong></span>
+          <button id="scope-change" class="scope-change" type="button" aria-controls="scope-setup" aria-expanded="false">
+            更改
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div id="scope-setup" class="scope-setup" hidden>
+          <div class="scope-setup-heading">
+            <h2 id="scope-picker-title">先选择整理范围</h2>
+            <p>选择后会记住；以后可随时更改。</p>
+          </div>
+          <fieldset class="scope-options">
+            <legend class="visually-hidden">选择本次及以后整理的标签范围</legend>
+            <label class="scope-option">
+              <input type="radio" name="scope-mode" value="incremental">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h11m0 0-3-3m3 3-3 3M20 17H9m0 0 3-3m-3 3 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span><strong>继续整理</strong><small>新标签及栖页旧组；保留手动分组</small></span>
+              <em id="scope-incremental-count">—</em>
+            </label>
+            <label class="scope-option">
+              <input type="radio" name="scope-mode" value="all">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19.5 8A8 8 0 0 0 5.6 5.6L3.5 8M3.5 4.5V8H7M4.5 16A8 8 0 0 0 18.4 18.4l2.1-2.4m0 3.5V16H17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span><strong>全部重整</strong><small>重新归类可处理标签；现有手动组也会改变</small></span>
+              <em id="scope-all-count">—</em>
+            </label>
+          </fieldset>
+          <p class="scope-warning"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 2.8 19a1 1 0 0 0 .9 1.5h16.6a1 1 0 0 0 .9-1.5L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 9v5m0 3h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>全部重整会改动原有分组；固定、分屏和不支持的页面仍跳过。撤销依赖当前分组未被再次改动。</span></p>
+          <div class="scope-setup-actions">
+            <button id="scope-cancel" class="test-button" type="button" hidden>取消</button>
+            <button id="scope-confirm" class="save-button" type="button" disabled>确认整理范围</button>
+          </div>
+        </div>
+      </section>
+
+      <fieldset class="strategy" id="strategy">
+        <legend>整理方式</legend>
+        <label class="strategy-option">
+          <input type="radio" name="mode" value="rules" checked>
+          <span><strong>本地规则</strong><small>本机处理</small></span>
+        </label>
+        <label class="strategy-option">
+          <input type="radio" name="mode" value="ai">
+          <span><strong>AI 智能</strong><small>需配置接口</small></span>
+        </label>
+      </fieldset>
+
+      <div class="preference-summary" aria-live="polite">
+        <span>当前整理偏好</span>
+        <strong id="preference-summary">自动归类 · 名称自动</strong>
+      </div>
+
+      <button id="organize" class="primary-button" type="button" disabled>正在读取标签页…</button>
+      <button id="preview-button" class="preview-link" type="button" title="仅生成建议，不移动标签；AI 模式会调用模型" disabled>预览建议</button>
+      <div class="context-row">
+        <span class="info-tip">
+          <button class="info-trigger" type="button" aria-describedby="safety-note" aria-label="查看整理范围说明">
+            <span>整理范围</span>
+          </button>
+          <span id="safety-note" class="info-popover" role="tooltip">创建 Chrome 原生分组；固定标签和手动分组不变。</span>
+        </span>
+        <span id="ai-disclosure-wrap" class="info-tip align-right" hidden>
+          <button class="info-trigger" type="button" aria-describedby="ai-disclosure" aria-label="查看 AI 发送数据说明">
+            <span>AI 发送标题与域名</span>
+          </button>
+          <span id="ai-disclosure" class="info-popover" role="tooltip">仅将本次参与整理标签的标题、网站域名、归一化网站标识和临时编号发送至你配置的 AI 接口；预览也会调用模型。</span>
+        </span>
+      </div>
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+      <div class="status-row">
+        <span id="review-info" class="info-tip" hidden>
+          <button class="info-trigger" type="button" aria-describedby="review-diagnostic">
+            <span id="review-summary" aria-live="polite">查看整理明细</span>
+          </button>
+          <span id="review-diagnostic" class="info-popover" role="tooltip"></span>
+        </span>
+        <span id="settings-state" class="settings-state" role="status" aria-live="polite">AI 尚未配置</span>
+      </div>
+
+      <footer class="footer">
+        <button id="undo" class="text-button" type="button" title="仅撤销栖页创建的分组" aria-description="仅撤销栖页创建的分组" disabled>撤销上次整理</button>
+      </footer>
+    </section>
+
+    <section id="performance-view" class="performance-view" role="tabpanel" aria-labelledby="performance-tab" hidden>
+      <div class="performance-status" id="performance-status" data-state="loading">
+        <div class="performance-status-heading">
+          <span class="performance-status-mark" aria-hidden="true"></span>
+          <div>
+            <h2 id="performance-title">正在核对后台标签</h2>
+            <p id="performance-scope">当前窗口</p>
+          </div>
+        </div>
+        <div class="performance-status-caption">
+          <p id="performance-status-copy">读取后台标签状态…</p>
+        </div>
+        <div class="performance-counts" aria-label="当前窗口后台标签状态">
+          <span><strong id="performance-eligible">—</strong>可释放</span>
+          <span><strong id="performance-discarded">—</strong>已释放</span>
+          <span><strong id="performance-protected">—</strong>受保护</span>
+        </div>
+      </div>
+      <div id="performance-notice" class="notice" role="status" aria-live="polite" hidden></div>
+      <div class="performance-list-heading">
+        <h3>选择后台标签</h3>
+        <button id="performance-refresh" class="text-button" type="button">刷新</button>
+      </div>
+      <div class="performance-toolbar">
+        <div class="performance-filter" role="group" aria-label="分组筛选">
+          <button id="performance-filter-eligible" type="button" aria-pressed="true">待释放</button>
+          <button id="performance-filter-all" type="button" aria-pressed="false">全部分组</button>
+        </div>
+        <div class="performance-bulk">
+          <button id="performance-select-all" class="text-button" type="button">全选</button>
+          <button id="performance-clear-selection" class="text-button" type="button">清空</button>
+        </div>
+      </div>
+      <div id="performance-groups" class="performance-groups" aria-label="当前窗口的标签组"></div>
+      <div class="performance-actions">
+        <p>已选择 <strong id="performance-selected-count">0</strong> 个可释放标签</p>
+        <p id="performance-safety-hint" class="performance-safety">标签保留，再打开会重载；未保存内容可能丢失</p>
+        <button id="performance-discard" class="save-button" type="button" disabled>选择标签组</button>
+      </div>
+      <button id="performance-settings" class="performance-settings-link text-button" type="button">Chrome 自动内存节省设置 ↗</button>
+    </section>
+
+    <section id="preview-view" class="preview-view" aria-labelledby="preview-title" hidden>
+      <header class="settings-header">
+        <button id="preview-back" class="icon-button" type="button" title="返回整理" aria-label="返回整理">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m14.5 5-7 7 7 7M8 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="title-block"><h2 id="preview-title">整理预览</h2></div>
+      </header>
+      <p id="preview-summary" class="preview-summary"></p>
+      <div id="preview-groups" class="preview-groups"></div>
+      <div class="preview-actions">
+        <button id="preview-cancel" class="test-button" type="button">取消</button>
+        <button id="preview-apply" class="save-button" type="button">按此整理</button>
+      </div>
+    </section>
+
+    <section id="settings" class="settings-view" aria-labelledby="settings-title" hidden>
+      <header class="settings-header">
+        <button id="settings-back" class="icon-button" type="button" title="返回当前模块" aria-label="返回当前模块">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m14.5 5-7 7 7 7M8 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="title-block">
+          <h2 id="settings-title">设置</h2>
+        </div>
+        <div class="appearance-control">
+          <button class="icon-button appearance-button" type="button" title="切换外观" aria-label="切换外观" aria-controls="settings-appearance-menu" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="8.25" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M12 3.75a8.25 8.25 0 0 1 0 16.5Z" fill="currentColor"/>
+            </svg>
+          </button>
+          <div id="settings-appearance-menu" class="appearance-menu" role="group" aria-label="外观模式" hidden>
+            <span class="appearance-menu-title">外观</span>
+            <button type="button" data-theme-option="system" aria-pressed="true">跟随系统</button>
+            <button type="button" data-theme-option="light" aria-pressed="false">浅色</button>
+            <button type="button" data-theme-option="dark" aria-pressed="false">深色</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="settings-body">
+        <section class="settings-section" aria-labelledby="presentation-title">
+          <div class="section-heading"><h3 id="presentation-title">打开方式</h3></div>
+          <p class="setting-intro">点击工具栏图标时</p>
+          <div class="presentation-options" role="radiogroup" aria-label="点击工具栏图标时打开">
+            <label class="presentation-option">
+              <input type="radio" name="presentation" value="sidepanel" checked>
+              <span><strong>侧边栏</strong><small>边浏览边管理</small></span>
+            </label>
+            <label class="presentation-option">
+              <input type="radio" name="presentation" value="popup">
+              <span><strong>弹窗</strong><small>快速查看</small></span>
+            </label>
+          </div>
+        </section>
+        <section class="settings-section" aria-labelledby="grouping-title">
+          <div class="section-heading">
+            <h3 id="grouping-title">分组与命名</h3>
+          </div>
+          <div class="preference-field">
+            <div class="field-heading"><label for="basis">整理偏好</label></div>
+            <select id="basis">
+              <option value="topic">自动归类</option>
+              <option value="site">同站合并</option>
+            </select>
+          </div>
+          <div class="preference-field">
+            <div class="field-heading"><label for="language">分组名称语言</label></div>
+            <select id="language">
+              <option value="auto">跟随内容（自动）</option>
+              <option value="zh">中文</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div class="memory-setting">
+            <div>
+              <span class="field-heading">手动调整记忆</span>
+              <small id="memory-count">正在读取…</small>
+            </div>
+            <button id="clear-memory" class="text-button" type="button" disabled>清除记忆</button>
+          </div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="ai-title">
+          <div class="section-heading">
+            <h3 id="ai-title">AI 接口</h3>
+            <span id="settings-state-inline" class="status-badge">未配置</span>
+          </div>
+
+          <div class="field">
+            <div class="field-heading"><label for="endpoint">API 地址</label></div>
+            <input id="endpoint" type="url" autocomplete="url" spellcheck="false" placeholder="https://api.example.com/v1">
+          </div>
+
+          <div class="field">
+            <div class="field-heading with-cue">
+              <label for="api-key">API Key</label>
+              <span id="api-key-hint" class="storage-cue">本机保存 · 未加密</span>
+            </div>
+            <div class="input-with-action">
+              <input id="api-key" type="password" autocomplete="off" spellcheck="false" aria-describedby="api-key-hint" placeholder="sk-…">
+              <button id="toggle-api-key" class="visibility-button" type="button" title="显示 API Key" aria-label="显示 API Key" data-visible="false">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M2.5 12c2.3-3.5 5.5-5.25 9.5-5.25s7.2 1.75 9.5 5.25c-2.3 3.5-5.5 5.25-9.5 5.25S4.8 15.5 2.5 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                  <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+                  <path class="visibility-slash" d="M3.5 3.5 20.5 20.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-heading"><label for="model">模型</label></div>
+            <div class="input-with-action">
+              <input id="model" list="model-list" autocomplete="off" spellcheck="false" placeholder="选择或填写模型 ID">
+              <button id="get-models" class="icon-input-button" type="button" title="获取模型列表" aria-label="获取模型列表">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M20 11a8 8 0 1 0 1 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M20 5v6h-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            <datalist id="model-list"></datalist>
+            <span id="model-status" class="field-hint" hidden></span>
+          </div>
+
+          <div class="settings-actions">
+            <button id="save-settings" class="save-button" type="button">保存 AI 设置</button>
+            <button id="test-connection" class="test-button" type="button">测试连接</button>
+          </div>
+        </section>
+        <section class="settings-section about-section" aria-labelledby="about-title">
+          <div class="section-heading"><h3 id="about-title">关于</h3></div>
+          <dl class="about-details">
+            <div><dt>版本</dt><dd id="app-version">1.3.0</dd></div>
+            <div><dt>作者</dt><dd>iTang</dd></div>
+            <div><dt>GitHub</dt><dd><a class="github-link" href="https://github.com/TangTang0812/qiye-tab-manager" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 19c-4.5 1.4-4.5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3-.3 6.1-1.5 6.1-6.8a5.3 5.3 0 0 0-1.4-3.7 4.9 4.9 0 0 0-.1-3.6S18.5 1 16 2.7a13.4 13.4 0 0 0-8 0C5.5 1 4.3 1.4 4.3 1.4a4.9 4.9 0 0 0-.1 3.6 5.3 5.3 0 0 0-1.4 3.7c0 5.3 3.1 6.5 6.1 6.8A3.4 3.4 0 0 0 8 18.1V22" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"/></svg><span>TangTang0812/qiye-tab-manager ↗</span></a></dd></div>
+          </dl>
+          <button id="replay-tour" class="replay-tour" type="button">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M9.5 9a2.7 2.7 0 1 1 4.3 2.2c-1 .7-1.8 1.2-1.8 2.3m0 3h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            重新查看使用引导
+          </button>
+        </section>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
