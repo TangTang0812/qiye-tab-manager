@@ -8,8 +8,12 @@
 ![Chrome](https://img.shields.io/badge/Chrome-127%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Manifest](https://img.shields.io/badge/Manifest-V3-34A853)
 ![Tests](https://img.shields.io/badge/tests-49%20passed-2EA043)
+![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-EA7E20)
 
 Maintainer: iTang
+
+> [!IMPORTANT]
+> Smart Tab Organizer is **source-available for noncommercial use only**. Commercial use requires prior written permission from the copyright holder. See [License](#license).
 
 ## The problem is not simply “too many tabs”
 
@@ -266,12 +270,22 @@ Coverage includes local and AI grouping completeness, the 24-group limit, site c
 - Extensions cannot modify Chrome's built-in tab-search menu.
 - Version 0.13.2 does not include manual memory release; that capability was added in the later Qiye product line.
 
+## License
+
+Copyright © 2026 iTang.
+
+Smart Tab Organizer is provided under the [PolyForm Noncommercial License 1.0.0](../../../LICENSE). You may use, study, modify, and redistribute it for permitted noncommercial purposes, subject to the full license terms and preservation of the required notices.
+
+Commercial use is **not granted** by the repository license. This includes use in paid products or services, revenue-generating deployments, commercial client work, and internal business workflows. Obtain separate written permission from the copyright holder before any commercial use.
+
+This is a **source-available** project, not OSI-approved open-source software. If this summary conflicts with the `LICENSE` file, the `LICENSE` file controls.
+
 ## Before publishing
 
 - [ ] Keep this README and the source in the same version directory.
 - [ ] Keep the relative `assets/` paths.
 - [ ] Add a standalone privacy policy covering AI metadata transmission and local key storage.
-- [ ] Choose and add a `LICENSE`; this snapshot does not declare an open-source license.
+- [x] Add the PolyForm Noncommercial 1.0.0 `LICENSE` and clearly identify the project as source-available.
 - [ ] Add support, issue, release, and Chrome Web Store links.
 - [ ] Run a clean-profile manual test: install, organize, preview, restart, and undo.
 
@@ -281,4 +295,3 @@ Coverage includes local and AI grouping completeness, the 24-group limit, site c
 - No generative image was used to fabricate product UI.
 - The 0.13.x interface changed during iteration, so screenshots document real workflows and outcomes rather than promising pixel-perfect identity with the final 0.13.2 build.
 - Images containing account data, API keys, full browsing history, or system usernames were excluded.
-
