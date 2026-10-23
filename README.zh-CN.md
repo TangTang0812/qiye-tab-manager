@@ -8,8 +8,12 @@
 ![Chrome](https://img.shields.io/badge/Chrome-140%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Manifest](https://img.shields.io/badge/Manifest-V3-34A853)
 ![Tests](https://img.shields.io/badge/tests-64%20passed-2EA043)
+![许可证](https://img.shields.io/badge/许可证-PolyForm%20Noncommercial%201.0.0-EA7E20)
 
 维护者：iTang
+
+> [!IMPORTANT]
+> 栖页是一个**仅限非商业用途的源码可用项目**。任何商业使用均须事先获得版权所有者的书面许可，详见[许可证](#许可证)。
 
 ## 为什么从“智序标签”升级成“栖页”
 
@@ -403,13 +407,23 @@ fail  0
 - 侧边栏位置由 Chrome 设置决定；
 - AI 分类仍可能误判，重要窗口建议先预览。
 
+## 许可证
+
+版权所有 © 2026 iTang。
+
+栖页依据 [PolyForm Noncommercial License 1.0.0](./LICENSE) 提供。在遵守完整许可证条款并保留必要声明的前提下，可以将本项目用于获准的非商业用途，包括使用、学习、修改和再分发。
+
+仓库许可证**不授予商业使用权**，包括用于付费产品或服务、产生收入的部署、商业客户项目以及企业内部业务流程。任何商业使用均须事先获得版权所有者另行出具的书面许可。
+
+本项目属于**源码可用（source-available）**项目，而不是 OSI 认可的开源软件。如果本段摘要与 `LICENSE` 文件存在冲突，以 `LICENSE` 文件为准。
+
 ## 面向 GitHub / 商店发布前的清单
 
 - [ ] 将 README 与源码放在同一仓库根目录，保留 `assets/` 相对路径；
 - [ ] 添加独立隐私政策，分别说明整理数据、AI 传输、Key 存储和内存管理；
 - [ ] 增加首次安装、侧边栏、范围选择、内存释放和撤销的人工测试记录；
 - [ ] 在干净 Chrome 配置、多个窗口和 100+ 标签场景中做回归；
-- [ ] 选择并添加 `LICENSE`；当前快照没有声明开源许可证；
+- [x] 添加 PolyForm Noncommercial 1.0.0 `LICENSE`，并明确说明本项目属于源码可用项目；
 - [ ] 添加问题反馈、支持渠道、版本发布页与 Chrome Web Store 链接；
 - [ ] 发布截图前再次检查账号名、完整 URL、API Key、浏览历史和系统用户名。
 
@@ -420,4 +434,3 @@ fail  0
 - 没有使用生成式图片伪造界面；
 - 为保护隐私，未放入含 GitHub 账号主页、完整标签标题列表、活动监视器用户名列或 API 设置的截图；
 - 实机数据用于说明工作流和结果，不构成跨设备性能承诺。
-
